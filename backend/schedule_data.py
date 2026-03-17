@@ -10,11 +10,15 @@ def get_todays_games():
     line_score_df = scoreboard.get_data_frames()[1]
 
     games = []
+    seen_game_ids = set()
 
     for game_id in games_df["GAME_ID"]:
+        if game_id in seen_game_ids:
+            continue
+
         game_teams = line_score_df[line_score_df["GAME_ID"] == game_id]
 
-        if len(game_teams) == 2:
+        if len(game_teams) >= 2:
             away_team = game_teams.iloc[0]["TEAM_NAME"]
             home_team = game_teams.iloc[1]["TEAM_NAME"]
 
@@ -23,5 +27,7 @@ def get_todays_games():
                 "away_team": away_team,
                 "home_team": home_team
             })
+
+            seen_game_ids.add(game_id)
 
     return games

@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from matchup_features import get_matchup_features
 from predict_game import predict_game
 from player_predictions import predict_player_points
@@ -7,6 +8,14 @@ from schedule_data import get_todays_games
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.get("/")
 def home():
     return {"message": "NBA AI Predictor API Running"}
@@ -14,8 +23,7 @@ def home():
 @app.get("/predict-game")
 def predict_game_endpoint(team1: str, team2: str):
     matchup = get_matchup_features(team1, team2)
-    prediction = predict_game(matchup)
-    return prediction
+    return predict_game(matchup)
 
 @app.get("/predict-player")
 def predict_player_endpoint(player_name: str):
