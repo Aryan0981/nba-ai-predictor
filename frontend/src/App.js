@@ -70,8 +70,13 @@ function App() {
     } finally {
       setLoadingSummary(false);
     }
+
   };
 
+  const clearPrediction = () => {
+      setSummary(null);
+      setSelectedGame("");
+    };
 
   return (
   <div className="app-container">
@@ -93,7 +98,11 @@ function App() {
           <div className="game-list">
             {games.map((game) => (
               <div
-                className={`game-row ${selectedGame === `${game.away_team} @ ${game.home_team}` ? "selected-game-row" : ""}`}
+                className={`game-row ${
+                  selectedGame === `${game.away_team} @ ${game.home_team}`
+                    ? "selected-game-row"
+                    : ""
+                }`}
                 key={game.game_id}
               >
                 <div>
@@ -116,7 +125,16 @@ function App() {
       <div className="card">
         <h2 className="section-title">Prediction Dashboard</h2>
 
-        {!summary && !loadingSummary && <p>Select a game to see the prediction.</p>}
+        {summary && (
+          <button className="clear-button" onClick={clearPrediction}>
+            Clear Prediction
+          </button>
+        )}
+
+        {!summary && !loadingSummary && (
+          <p>Select a game to see the prediction.</p>
+        )}
+
         {loadingSummary && <p>Loading prediction...</p>}
 
         {summary && !loadingSummary && (
@@ -134,11 +152,18 @@ function App() {
 
             <div className="summary-block">
               <h4>Projected Scores</h4>
-              {Object.entries(summary.prediction.projected_scores).map(([team, range]) => (
-                <p key={team}>
-                  <strong>{team}:</strong> {range[0]} - {range[1]}
-                </p>
-              ))}
+              <div className="score-grid">
+                {Object.entries(summary.prediction.projected_scores).map(
+                  ([team, range]) => (
+                    <div className="score-card" key={team}>
+                      <p className="score-team">{team}</p>
+                      <p className="score-range">
+                        {range[0]} - {range[1]}
+                      </p>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
 
             <div className="summary-block">
@@ -151,28 +176,34 @@ function App() {
             </div>
 
             <div className="player-grid">
-              <div>
+              <div className="player-card">
                 <h4>{summary.matchup.team1} Players</h4>
-                <ul>
+                <div className="player-list">
                   {summary.players[summary.matchup.team1].map((player, index) => (
-                    <li key={index}>
-                      {player.player}: {player.projected_points_range[0]} -{" "}
-                      {player.projected_points_range[1]} pts
-                    </li>
+                    <div className="player-row" key={index}>
+                      <span className="player-name">{player.player}</span>
+                      <span className="player-range">
+                        {player.projected_points_range[0]} -{" "}
+                        {player.projected_points_range[1]} pts
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
 
-              <div>
+              <div className="player-card">
                 <h4>{summary.matchup.team2} Players</h4>
-                <ul>
+                <div className="player-list">
                   {summary.players[summary.matchup.team2].map((player, index) => (
-                    <li key={index}>
-                      {player.player}: {player.projected_points_range[0]} -{" "}
-                      {player.projected_points_range[1]} pts
-                    </li>
+                    <div className="player-row" key={index}>
+                      <span className="player-name">{player.player}</span>
+                      <span className="player-range">
+                        {player.projected_points_range[0]} -{" "}
+                        {player.projected_points_range[1]} pts
+                      </span>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>

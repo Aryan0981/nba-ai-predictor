@@ -100,3 +100,71 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+.clear-button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  background-color: #dc2626;
+  color: white;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.score-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  background-color: #f9fafb;
+}
+
+.score-team {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.score-range {
+  font-size: 18px;
+  color: #111827;
+  margin: 0;
+}
+
+.player-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  background-color: #f9fafb;
+}
+
+.player-list {
+  display: grid;
+  gap: 10px;
+}
+
+.player-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #ececec;
+}
+
+.player-row:last-child {
+  border-bottom: none;
+}
+
+.player-name {
+  font-weight: 500;
+}
+
+.player-range {
+  color: #111827;
+  font-weight: 600;
+}
