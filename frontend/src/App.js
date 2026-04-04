@@ -2,23 +2,76 @@ import React, { useState } from "react";
 import "./App.css";
 
 const teamPlayers = {
-  Lakers: ["LeBron James", "Luka Doncic", "Austin Reaves"],
-  Nuggets: ["Nikola Jokic", "Jamal Murray", "Christian Braun"],
-  Heat: ["Bam Adebayo", "Tyler Herro", "Jimmy Butler"],
-  Hornets: ["LaMelo Ball", "Miles Bridges", "Brandon Miller"],
-  Magic: ["Paolo Banchero", "Franz Wagner", "Jalen Suggs"],
-  Thunder: ["Shai Gilgeous-Alexander", "Jalen Williams", "Chet Holmgren"],
-  Wizards: ["Jordan Poole", "Kyle Kuzma", "Bilal Coulibaly"],
-  Pistons: ["Cade Cunningham", "Jaden Ivey", "Jalen Duren"],
-  Pacers: ["Tyrese Haliburton", "Pascal Siakam", "Myles Turner"],
-  Knicks: ["Jalen Brunson", "OG Anunoby", "Karl-Anthony Towns"],
-  Cavaliers: ["Donovan Mitchell", "Darius Garland", "Evan Mobley"],
-  Bucks: ["Giannis Antetokounmpo", "Damian Lillard", "Khris Middleton"],
-  Suns: ["Kevin Durant", "Devin Booker", "Bradley Beal"],
-  Timberwolves: ["Anthony Edwards", "Julius Randle", "Rudy Gobert"],
-  "76ers": ["Joel Embiid", "Tyrese Maxey", "Paul George"],
-  Spurs: ["Victor Wembanyama", "Devin Vassell", "Keldon Johnson"],
-  Kings: ["De'Aaron Fox", "Domantas Sabonis", "Keegan Murray"],
+  "Atlanta Hawks": ["Trae Young", "Jalen Johnson", "Clint Capela"],
+  "Boston Celtics": ["Jayson Tatum", "Jaylen Brown", "Kristaps Porzingis"],
+  "Brooklyn Nets": ["Mikal Bridges", "Cam Thomas", "Nic Claxton"],
+  "Charlotte Hornets": ["LaMelo Ball", "Miles Bridges", "Brandon Miller"],
+  "Chicago Bulls": ["Zach LaVine", "DeMar DeRozan", "Nikola Vucevic"],
+  "Cleveland Cavaliers": ["Donovan Mitchell", "Darius Garland", "Evan Mobley"],
+  "Dallas Mavericks": ["Luka Doncic", "Kyrie Irving", "Klay Thompson"],
+  "Denver Nuggets": ["Nikola Jokic", "Jamal Murray", "Michael Porter Jr."],
+  "Detroit Pistons": ["Cade Cunningham", "Jaden Ivey", "Jalen Duren"],
+  "Golden State Warriors": ["Stephen Curry", "Draymond Green", "Jonathan Kuminga"],
+  "Houston Rockets": ["Jalen Green", "Alperen Sengun", "Fred VanVleet"],
+  "Indiana Pacers": ["Tyrese Haliburton", "Pascal Siakam", "Myles Turner"],
+  "Los Angeles Clippers": ["Kawhi Leonard", "James Harden", "Paul George"],
+  "Los Angeles Lakers": ["LeBron James", "Luka Doncic", "Austin Reaves"],
+  "Memphis Grizzlies": ["Ja Morant", "Desmond Bane", "Jaren Jackson Jr."],
+  "Miami Heat": ["Bam Adebayo", "Tyler Herro", "Jimmy Butler"],
+  "Milwaukee Bucks": ["Giannis Antetokounmpo", "Damian Lillard", "Khris Middleton"],
+  "Minnesota Timberwolves": ["Anthony Edwards", "Julius Randle", "Rudy Gobert"],
+  "New Orleans Pelicans": ["Zion Williamson", "Brandon Ingram", "CJ McCollum"],
+  "New York Knicks": ["Jalen Brunson", "OG Anunoby", "Karl-Anthony Towns"],
+  "Oklahoma City Thunder": ["Shai Gilgeous-Alexander", "Jalen Williams", "Chet Holmgren"],
+  "Orlando Magic": ["Paolo Banchero", "Franz Wagner", "Jalen Suggs"],
+  "Philadelphia 76ers": ["Joel Embiid", "Tyrese Maxey", "Paul George"],
+  "Phoenix Suns": ["Kevin Durant", "Devin Booker", "Bradley Beal"],
+  "Portland Trail Blazers": ["Anfernee Simons", "Jerami Grant", "Deandre Ayton"],
+  "Sacramento Kings": ["De'Aaron Fox", "Domantas Sabonis", "Keegan Murray"],
+  "San Antonio Spurs": ["Victor Wembanyama", "Devin Vassell", "Keldon Johnson"],
+  "Toronto Raptors": ["Scottie Barnes", "RJ Barrett", "Immanuel Quickley"],
+  "Utah Jazz": ["Lauri Markkanen", "Collin Sexton", "Jordan Clarkson"],
+  "Washington Wizards": ["Jordan Poole", "Kyle Kuzma", "Bilal Coulibaly"],
+};
+
+const teamNameAliases = {
+  Hawks: "Atlanta Hawks",
+  Celtics: "Boston Celtics",
+  Nets: "Brooklyn Nets",
+  Hornets: "Charlotte Hornets",
+  Bulls: "Chicago Bulls",
+  Cavaliers: "Cleveland Cavaliers",
+  Cavs: "Cleveland Cavaliers",
+  Mavericks: "Dallas Mavericks",
+  Mavs: "Dallas Mavericks",
+  Nuggets: "Denver Nuggets",
+  Pistons: "Detroit Pistons",
+  Warriors: "Golden State Warriors",
+  Rockets: "Houston Rockets",
+  Pacers: "Indiana Pacers",
+  Clippers: "Los Angeles Clippers",
+  "LA Clippers": "Los Angeles Clippers",
+  Lakers: "Los Angeles Lakers",
+  "LA Lakers": "Los Angeles Lakers",
+  Grizzlies: "Memphis Grizzlies",
+  Heat: "Miami Heat",
+  Bucks: "Milwaukee Bucks",
+  Timberwolves: "Minnesota Timberwolves",
+  Wolves: "Minnesota Timberwolves",
+  Pelicans: "New Orleans Pelicans",
+  Knicks: "New York Knicks",
+  Thunder: "Oklahoma City Thunder",
+  Magic: "Orlando Magic",
+  "76ers": "Philadelphia 76ers",
+  Sixers: "Philadelphia 76ers",
+  Suns: "Phoenix Suns",
+  "Trail Blazers": "Portland Trail Blazers",
+  Blazers: "Portland Trail Blazers",
+  Kings: "Sacramento Kings",
+  Spurs: "San Antonio Spurs",
+  Raptors: "Toronto Raptors",
+  Jazz: "Utah Jazz",
+  Wizards: "Washington Wizards",
 };
 
 function App() {
@@ -43,10 +96,17 @@ function App() {
   };
 
   const loadSummary = async (homeTeam, awayTeam) => {
-    const team1Players = teamPlayers[homeTeam];
-    const team2Players = teamPlayers[awayTeam];
+    const normalizedHomeTeam = teamNameAliases[homeTeam] || homeTeam;
+    const normalizedAwayTeam = teamNameAliases[awayTeam] || awayTeam;
+
+    const team1Players = teamPlayers[normalizedHomeTeam];
+    const team2Players = teamPlayers[normalizedAwayTeam];
 
     if (!team1Players || !team2Players) {
+      console.log("Original homeTeam:", homeTeam);
+      console.log("Original awayTeam:", awayTeam);
+      console.log("Normalized homeTeam:", normalizedHomeTeam);
+      console.log("Normalized awayTeam:", normalizedAwayTeam);
       alert("Player mapping not added yet for one of these teams.");
       return;
     }
@@ -70,7 +130,6 @@ function App() {
     } finally {
       setLoadingSummary(false);
     }
-
   };
 
   const clearPrediction = () => {
